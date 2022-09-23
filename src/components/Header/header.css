@@ -1,0 +1,27 @@
+.header {
+    background-color: #FF5D5D;
+    min-height: 20vh;
+    position: absolute;
+    padding: 0px !important;
+}
+
+.arrow-left {
+    color: black;
+    min-height: 4vh;
+}
+
+
+/*---------------------------------------------MEDIA QUERYS--------------------------------------------------------*/
+@media (min-width: 576px) {}
+
+/*Medium devices (tablets, 768px and up)*/
+@media (min-width: 768px) {}
+
+/*Large devices (desktops, 992px and up)*/
+@media (min-width: 992px) {}
+
+/*X-Large devices (large desktops, 1200px and up)*/
+@media (min-width: 1200px) {}
+
+/*XX-Large devices (larger desktops, 1400px and up)*/
+@media (min-width: 1400px) {}

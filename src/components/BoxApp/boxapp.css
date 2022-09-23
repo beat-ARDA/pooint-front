@@ -1,0 +1,24 @@
+.box-app {
+    background-color: white;
+    width: 95%;
+    height: 85vh;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.side-bar {
+    padding: 0px !important;
+}
+
+.chat-zone {
+    padding: 0px !important;
+    background-color: #E0DFDF;
+    height: 85vh;
+    position: relative;
+}
+
+.row {
+    margin: 0px !important;
+}
