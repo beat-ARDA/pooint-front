@@ -1,0 +1,31 @@
+.aside-chats {
+    height: 100%;
+    border-right: 0.1rem solid;
+    box-shadow: 0.2rem 0.6rem 1rem black;
+}
+
+.aside-chat-title {
+    font-family: cursive;
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.row-chats-title {
+    border-bottom: 0.2rem solid;
+}
+
+.img-tarjeta-chat {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 2rem;
+}
+
+.tarjeta-chat {
+    font-family: cursive;
+    border-bottom: 0.02rem solid;
+}
+
+.tarjeta-chat:hover {
+    background-color: rgba(255, 93, 93, 1);
+    color: white;
+}
