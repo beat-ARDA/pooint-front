@@ -1,53 +1,78 @@
-import React from "react";
+import { useState, useRef, useEffect } from "react";
 import './zone-chats.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperclip, faPaperPlane, faVideoCamera } from '@fortawesome/free-solid-svg-icons';
 
-export default class ZoneChat extends React.Component {
-    render() {
-        return (
-            <div className='zonechat d-flex flex-column align-items-center'>
-                <div className='row w-100 m-0 header-zonechat'>
-                    <div className='col-2 p-0 d-flex align-items-center justify-content-center ps-2'>
-                        {this.props.messagesOrteams == "messages" ?
-                            <img src='perfil.jpg' className="img-header-zonechat" /> :
-                            <img src='equipos.png' className="img-header-zonechat" />}
-                    </div>
-                    <div className='col-8 p-0 d-flex align-items-center justify-content-center'>
-                        <label className="title-chat">{this.props.titleZoneChat}</label>
-                    </div>
-                    {
-                        this.props.videollamada ?
-                            <div className="col-2 p-0 d-flex align-items-center justify-content-center pe-2">
-                                <FontAwesomeIcon icon={faVideoCamera} size="2x" />
-                            </div> : null
-                    }
+const ZoneChat = ({ messages, sendMessage, messagesOrteams, titleZoneChat, videollamada }) => {
+
+    const messageRef = useRef();
+
+    useEffect(() => {
+        if (messageRef && messageRef.current) {
+            const { scrollHeight, clientHeight } = messageRef.current;
+            messageRef.current.scrollTo({ left: 0, top: scrollHeight - clientHeight, behavior: 'smooth' });
+        }
+    }, [messages]);
+
+    const [message, setMessage] = useState('');
+
+    return (
+        <div className='zonechat d-flex flex-column align-items-center'>
+            <div className='row flex-nowrap w-100 m-0 header-zonechat'>
+                <div className='col-2 p-0 d-flex align-items-center justify-content-center ps-2'>
+                    {messagesOrteams == "messages" ?
+                        <img src='perfil.jpg' className="img-header-zonechat" /> :
+                        <img src='equipos.png' className="img-header-zonechat" />}
                 </div>
-                <div className="row w-100 m-0 chat-zone d-flex flex-column">
-                    <div className="row w-100 m-0 tarjeta-texto-otro p-2">
-                        <div className="col-12 p-0 d-flex align-items-center">
-                            <p className="m-0 p-0">Texto</p>
-                        </div>
-                    </div>
-                    <div className="row w-100 m-0 tarjeta-texto-yo p-2">
-                        <div className="col-12 p-0 d-flex justify-content-end align-items-center">
-                            <p className="m-0 p-0">Texto</p>
-                        </div>
-                    </div>
+                <div className='col-8 p-0 d-flex align-items-center justify-content-center'>
+                    <label className="title-chat">{titleZoneChat}</label>
                 </div>
-                <div className="row w-100 m-0 footer-chatzone d-flex align-items-center ">
-                    <div className="col-2 p-0 pe-2 d-flex justify-content-end">
-                        <FontAwesomeIcon icon={faPaperclip} size="2x" />
-                    </div>
-                    <div className="col-8 p-0 d-flex align-items-center">
-                        <input type="text" className="form-control" placeholder="Message..."
-                            aria-label="Message" aria-describedby="basic-addon1" />
-                    </div>
-                    <div className="col-2 p-0 ps-2">
-                        <FontAwesomeIcon icon={faPaperPlane} size="2x" />
-                    </div>
+                {
+                    videollamada ?
+                        <div className="col-2 p-0 d-flex align-items-center justify-content-center pe-2">
+                            <FontAwesomeIcon icon={faVideoCamera} size="2x" />
+                        </div> : null
+                }
+            </div>
+
+            <div ref={messageRef} className="p-0 m-0 w-100 chat-zone d-flex flex-column">
+                {
+                    messagesOrteams == "messages" ? null :
+                        messages.map((m, index) =>
+                            m.user != localStorage.getItem("UserName") ?
+                                <div key={index} className="align-self-start row tarjeta p-0 ms-3 my-1 d-flex flex-column align-items-center">
+                                    <div className="wrapper text-center col-12 m-0 p-2 text-tarjeta">{m.message}</div>
+                                    <div className="wrapper col-12 m-0 p-0 text-user">{m.user}</div>
+                                </div>
+                                :
+                                <div key={index} className="align-self-end row tarjeta p-0 me-3 my-1 d-flex flex-column align-items-center">
+                                    <div className="wrapper text-center col-12 m-0 p-2 text-tarjeta-user">{m.message}</div>
+                                    <div className="wrapper text-end col-12 m-0 p-0 text-user">{m.user}</div>
+                                </div>
+                        )
+                }
+            </div>
+            <div className="row w-100 m-0 footer-chatzone d-flex align-items-center ">
+                <div className="col-2 p-0 pe-2 d-flex justify-content-end">
+                    <FontAwesomeIcon icon={faPaperclip} size="2x" />
+                </div>
+                <div className="col-6 p-0 d-flex align-items-center">
+                    <input onChange={e => setMessage(e.target.value)} value={message} type="text" className="form-control" placeholder="Message..."
+                        aria-label="Message" aria-describedby="basic-addon1" />
+                </div>
+                <div className="col-2 p-0 d-flex align-items-center">
+                    <button onClick={e => {
+                        e.preventDefault();
+                        sendMessage(message);
+                        setMessage('');
+                    }} type="button">Send</button>
+                </div>
+                <div className="col-2 p-0 ps-2">
+                    <FontAwesomeIcon icon={faPaperPlane} size="2x" />
                 </div>
             </div>
-        );
-    }
+        </div>
+    );
 }
+
+export default ZoneChat;
