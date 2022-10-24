@@ -54,8 +54,8 @@ const Teams = () => {
                     <AsideChats
                         joinRoom={joinRoom}
                         titleAside="Equipos"
-                        messagesOrteams={"teams"} 
-                        closeConnection={closeConnection}/>
+                        messagesOrteams={"teams"}
+                        closeConnection={closeConnection} />
                 </div>
                 {
                     connection ?

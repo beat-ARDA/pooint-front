@@ -1,0 +1,20 @@
+.register {
+    height: 92%;
+}
+
+.titulo-register {
+    font-family: cursive;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.label-text {
+    font-family: cursive;
+    font-weight: bold;
+}
+
+.button-save {
+    width: 100%;
+    color: white !important;
+    background-color: #FF5D5D !important;
+}
