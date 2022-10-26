@@ -37,7 +37,20 @@ const ZoneChat = ({ messages, sendMessage, messagesOrteams, titleZoneChat, video
 
             <div ref={messageRef} className="p-0 m-0 w-100 chat-zone d-flex flex-column">
                 {
-                    messagesOrteams == "messages" ? null :
+                    messagesOrteams == "messages" ?
+                        messages.map((m, index) =>
+                            m.user != localStorage.getItem("UserName") ?
+                                <div key={index} className="align-self-start row tarjeta p-0 ms-3 my-1 d-flex flex-column align-items-center">
+                                    <div className="wrapper text-center col-12 m-0 p-2 text-tarjeta">{m.message}</div>
+                                    <div className="wrapper col-12 m-0 p-0 text-user">{m.user}</div>
+                                </div>
+                                :
+                                <div key={index} className="align-self-end row tarjeta p-0 me-3 my-1 d-flex flex-column align-items-center">
+                                    <div className="wrapper text-center col-12 m-0 p-2 text-tarjeta-user">{m.message}</div>
+                                    <div className="wrapper text-end col-12 m-0 p-0 text-user">{m.user}</div>
+                                </div>
+                        )
+                        :
                         messages.map((m, index) =>
                             m.user != localStorage.getItem("UserName") ?
                                 <div key={index} className="align-self-start row tarjeta p-0 ms-3 my-1 d-flex flex-column align-items-center">
