@@ -4,7 +4,7 @@
 }
 
 .row {
-    flex-wrap: nowrap!important;
+    flex-wrap: nowrap !important;
 }
 
 .chat-zone {
@@ -37,8 +37,8 @@
 }
 
 .tarjeta {
-    width: auto!important;
-    max-width: 50%!important;
+    width: auto !important;
+    max-width: 50% !important;
 }
 
 .text-tarjeta-user {
@@ -61,5 +61,9 @@
 }
 
 .wrapper {
-    overflow-wrap: break-word!important;
+    overflow-wrap: break-word !important;
+}
+
+.añadir-persona:hover {
+    color: #FF5D5D;
 }

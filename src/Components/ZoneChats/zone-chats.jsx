@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import './zone-chats.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperclip, faPaperPlane, faVideoCamera } from '@fortawesome/free-solid-svg-icons';
+import { faPaperclip, faPaperPlane, faVideoCamera, faCrosshairs } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 
 const ZoneChat = ({ messages, sendMessage, messagesOrteams, titleZoneChat, videollamada, messagesDb, idChat }) => {
@@ -9,7 +9,7 @@ const ZoneChat = ({ messages, sendMessage, messagesOrteams, titleZoneChat, video
     const messageRef = useRef();
 
     const InsertarChat = async (idChat, message, user) => {
-        await axios.post(baseUrlInsertarMessage, {idChat: idChat, message: message, user: user}).then(response => {
+        await axios.post(baseUrlInsertarMessage, { idChat: idChat, message: message, user: user }).then(response => {
             console.log(response.data)
         }).catch(error => {
             console.log(error);
@@ -17,7 +17,6 @@ const ZoneChat = ({ messages, sendMessage, messagesOrteams, titleZoneChat, video
     }
 
     useEffect(() => {
-        console.log(messagesDb);
         if (messageRef && messageRef.current) {
             const { scrollHeight, clientHeight } = messageRef.current;
             messageRef.current.scrollTo({ left: 0, top: scrollHeight - clientHeight, behavior: 'smooth' });
@@ -31,9 +30,13 @@ const ZoneChat = ({ messages, sendMessage, messagesOrteams, titleZoneChat, video
         <div className='zonechat d-flex flex-column align-items-center'>
             <div className='row flex-nowrap w-100 m-0 header-zonechat'>
                 <div className='col-2 p-0 d-flex align-items-center justify-content-center ps-2'>
-                    {messagesOrteams == "messages" ?
-                        <img src='perfil.jpg' className="img-header-zonechat" /> :
-                        <img src='equipos.png' className="img-header-zonechat" />}
+                    {
+                        messagesOrteams == "messages" ?
+                            <img src='perfil.jpg' className="img-header-zonechat" /> :
+                            <div>
+                                <img src='equipos.png' className="img-header-zonechat" />
+                            </div>
+                    }
                 </div>
                 <div className='col-8 p-0 d-flex align-items-center justify-content-center'>
                     <label className="title-chat">{titleZoneChat}</label>
@@ -42,7 +45,41 @@ const ZoneChat = ({ messages, sendMessage, messagesOrteams, titleZoneChat, video
                     videollamada ?
                         <div className="col-2 p-0 d-flex align-items-center justify-content-center pe-2">
                             <FontAwesomeIcon icon={faVideoCamera} size="2x" />
-                        </div> : null
+                        </div> :
+                        <div className="col-2 p-0 d-flex align-items-center justify-content-center pe-2">
+                            <FontAwesomeIcon
+                                data-bs-toggle="modal"
+                                data-bs-target="#addUserModal"
+                                className="añadir-persona"
+                                onClick={() => console.log("cruz")}
+                                icon={faCrosshairs}
+                                size="2x" />
+
+                            <div className="modal fade" id="addUserModal" tabIndex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+                                <div className="modal-dialog">
+                                    <div className="modal-content">
+                                        <div className="modal-header">
+                                            <div className="form-floating w-100">
+                                                <input
+                                                    onChange={e => { console.log("GG") }}
+                                                    className="form-control"
+                                                    placeholder="Search..."
+                                                    id="searchArea" />
+                                                <label htmlFor="searchArea">Search:</label>
+                                            </div>
+                                        </div>
+                                        <div className="modal-body">
+                                            <section>
+                                                <label className="title-search-user w-100 text-center">Usuarios</label>
+                                                <ul className="userSearchElements">
+                                                    <li>Datos</li>
+                                                </ul>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                 }
             </div>
 

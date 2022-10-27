@@ -2,15 +2,10 @@ import React from "react";
 import './aside-chats.css';
 import { useState, useEffect } from 'react';
 import axios from "axios";
+import { ObtenerUsuarios } from '../../Services/user.service';
+import { ObtenerChatsPorUsuario, IniciarChat, InsertarChat } from '../../Services/chat.service';
 
 const AsideChats = ({ joinRoom, titleAside, messagesOrteams, closeConnection }) => {
-    const baseUrlGetAllUsers = 'https://localhost:44349/api/User/GetAllUsers';
-    const baseUrlPostChat = 'https://localhost:44349/api/Chats/InsertChat';
-    const baseUrlPostChatTeam = 'https://localhost:44349/api/ChatsTeams/InsertChatTeam';
-    const baseUrlObtenerChatsPorUsuario = 'https://localhost:44349/api/Chats/GetChatsByUserId';
-    const baseUrlEliminarChatPorId = 'https://localhost:44349/api/Chats/DeleteChatById';
-    const baseUrlObtenerChatExistente = 'https://localhost:44349/api/Chats/GetChatByIds';
-
     const [dataUsers, setDataUsers] = useState([]);
     const [dataUsersSearch, setDataUsersSearch] = useState([]);
     const [dataChats, setDataChats] = useState([]);
@@ -18,69 +13,20 @@ const AsideChats = ({ joinRoom, titleAside, messagesOrteams, closeConnection }) 
     const [userId, setIdUsuario] = useState();
     const [room, setRoom] = useState();
 
-    const ObtenerUsuarios = async () => {
-        await axios.get(baseUrlGetAllUsers).then(response => {
-            setDataUsers(response.data);
-            setDataUsersSearch(response.data);
-        }).catch(error => {
-            console.log(error);
-        });
-    }
-
-    const IniciarChat = async (id1, id2, username1, username2) => {
-        messagesOrteams == "messages" ?
-            await axios.get(baseUrlObtenerChatExistente, { params: { UserId1: id1, UserId2: id2 } })
-                .then(response => {
-                    response.data.length > 0 ? null : InsertarChat(id1, id2, username1, username2);
-                })
-                .catch(error => console.log(error)) : InsertarChatTeam('Chat1');
-    }
-
-    const InsertarChatTeam = async (chatName) => {
-        await axios.post(baseUrlPostChatTeam, { chatName }).then(response => {
-            if (!response.data)
-                alert("Ocurrio un error inesperado!");
-        }).catch(error => {
-            alert("Error de conexion");
-            console.log(error);
-        });
-    }
-
-    const InsertarChat = async (userId1, userId2, username1, username2) => {
-        await axios.post(baseUrlPostChat, { userId1, userId2, username1, username2 }).then(response => {
-            if (!response.data)
-                alert("Ocurrio un error inesperado!");
-            else
-                ObtenerChatsPorUsuario();
-        }).catch(error => {
-            alert("Error de conexion");
-            console.log(error);
-        });
-    }
-
-    const ObtenerChatsPorUsuario = async () => {
-        await axios.get(baseUrlObtenerChatsPorUsuario, { params: { Id: parseInt(localStorage.getItem("UserId")) } })
-            .then(response => {
-                setDataChats(response.data);
-            }).catch(error => {
+    useEffect(() => {
+        ObtenerUsuarios()
+            .then((response) => {
+                setDataUsers(response);
+                setDataUsersSearch(response);
+            })
+            .catch((error) => {
                 console.log(error);
             });
-    }
 
-    const EliminarChatPorId = async () => {
-        axios.delete(baseUrlEliminarChatPorId, { chatId }).then(response => {
-            if (response.data)
-                alert("El chat a sido eliminado!");
-            else
-                alert("No se pudo eliminar el chat!");
-        }).catch(error => {
-            alert("Error de conexion!");
-        });
-    }
-
-    useEffect(() => {
-        ObtenerUsuarios();
-        ObtenerChatsPorUsuario();
+        ObtenerChatsPorUsuario()
+            .then((response) =>
+                setDataChats(response))
+            .catch((error) => console.log(error));
     }, []);
 
     return (
@@ -131,10 +77,20 @@ const AsideChats = ({ joinRoom, titleAside, messagesOrteams, closeConnection }) 
                                                 onClick={(e) => {
                                                     IniciarChat(
                                                         parseInt(localStorage.getItem("UserId").toString()),
-                                                        user.id,
-                                                        localStorage.getItem("UserName"),
-                                                        user.username
-                                                    );
+                                                        user.id
+                                                    ).then((response) => {
+                                                        response.data.length > 0 ? null
+                                                            :
+                                                            InsertarChat(
+                                                                parseInt(localStorage.getItem("UserId").toString()),
+                                                                user.id,
+                                                                localStorage.getItem("UserName"),
+                                                                user.username
+                                                            ).then((response) => {
+                                                                if (response.data)
+                                                                    ObtenerChatsPorUsuario();
+                                                            }).catch((error) => console.log(error));
+                                                    }).catch((error) => console.log(error));
                                                 }}
                                                 data-bs-dismiss="modal"
                                                 key={id}
