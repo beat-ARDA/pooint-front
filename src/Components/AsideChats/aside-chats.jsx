@@ -6,6 +6,7 @@ import axios from "axios";
 const AsideChats = ({ joinRoom, titleAside, messagesOrteams, closeConnection }) => {
     const baseUrlGetAllUsers = 'https://localhost:44349/api/User/GetAllUsers';
     const baseUrlPostChat = 'https://localhost:44349/api/Chats/InsertChat';
+    const baseUrlPostChatTeam = 'https://localhost:44349/api/ChatsTeams/InsertChatTeam';
     const baseUrlObtenerChatsPorUsuario = 'https://localhost:44349/api/Chats/GetChatsByUserId';
     const baseUrlEliminarChatPorId = 'https://localhost:44349/api/Chats/DeleteChatById';
     const baseUrlObtenerChatExistente = 'https://localhost:44349/api/Chats/GetChatByIds';
@@ -27,11 +28,22 @@ const AsideChats = ({ joinRoom, titleAside, messagesOrteams, closeConnection }) 
     }
 
     const IniciarChat = async (id1, id2, username1, username2) => {
-        await axios.get(baseUrlObtenerChatExistente, { params: { UserId1: id1, UserId2: id2 } })
-            .then(response => {
-                response.data.length > 0 ? null : InsertarChat(id1, id2, username1, username2);
-            })
-            .catch(error => console.log(error));
+        messagesOrteams == "messages" ?
+            await axios.get(baseUrlObtenerChatExistente, { params: { UserId1: id1, UserId2: id2 } })
+                .then(response => {
+                    response.data.length > 0 ? null : InsertarChat(id1, id2, username1, username2);
+                })
+                .catch(error => console.log(error)) : InsertarChatTeam('Chat1');
+    }
+
+    const InsertarChatTeam = async (chatName) => {
+        await axios.post(baseUrlPostChatTeam, { chatName }).then(response => {
+            if (!response.data)
+                alert("Ocurrio un error inesperado!");
+        }).catch(error => {
+            alert("Error de conexion");
+            console.log(error);
+        });
     }
 
     const InsertarChat = async (userId1, userId2, username1, username2) => {
