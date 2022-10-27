@@ -2,12 +2,22 @@ import { useState, useRef, useEffect } from "react";
 import './zone-chats.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperclip, faPaperPlane, faVideoCamera } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 
-const ZoneChat = ({ messages, sendMessage, messagesOrteams, titleZoneChat, videollamada }) => {
-
+const ZoneChat = ({ messages, sendMessage, messagesOrteams, titleZoneChat, videollamada, messagesDb, idChat }) => {
+    const baseUrlInsertarMessage = 'https://localhost:44349/api/ChatMessage';
     const messageRef = useRef();
 
+    const InsertarChat = async (idChat, message, user) => {
+        await axios.post(baseUrlInsertarMessage, {idChat: idChat, message: message, user: user}).then(response => {
+            console.log(response.data)
+        }).catch(error => {
+            console.log(error);
+        });
+    }
+
     useEffect(() => {
+        console.log(messagesDb);
         if (messageRef && messageRef.current) {
             const { scrollHeight, clientHeight } = messageRef.current;
             messageRef.current.scrollTo({ left: 0, top: scrollHeight - clientHeight, behavior: 'smooth' });
@@ -15,6 +25,7 @@ const ZoneChat = ({ messages, sendMessage, messagesOrteams, titleZoneChat, video
     }, [messages]);
 
     const [message, setMessage] = useState('');
+    const [messagesData, setMessagesData] = useState([]);
 
     return (
         <div className='zonechat d-flex flex-column align-items-center'>
@@ -38,7 +49,7 @@ const ZoneChat = ({ messages, sendMessage, messagesOrteams, titleZoneChat, video
             <div ref={messageRef} className="p-0 m-0 w-100 chat-zone d-flex flex-column">
                 {
                     messagesOrteams == "messages" ?
-                        messages.map((m, index) =>
+                        messagesDb.map((m, index) =>
                             m.user != localStorage.getItem("UserName") ?
                                 <div key={index} className="align-self-start row tarjeta p-0 ms-3 my-1 d-flex flex-column align-items-center">
                                     <div className="wrapper text-center col-12 m-0 p-2 text-tarjeta">{m.message}</div>
@@ -78,6 +89,7 @@ const ZoneChat = ({ messages, sendMessage, messagesOrteams, titleZoneChat, video
                         e.preventDefault();
                         sendMessage(message);
                         setMessage('');
+                        InsertarChat(idChat, message, localStorage.getItem('UserName'));
                     }} type="button">Send</button>
                 </div>
                 <div className="col-2 p-0 ps-2">

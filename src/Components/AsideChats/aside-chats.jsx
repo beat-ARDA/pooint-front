@@ -17,7 +17,6 @@ const AsideChats = ({ joinRoom, titleAside, messagesOrteams, closeConnection }) 
     const [userId, setIdUsuario] = useState();
     const [room, setRoom] = useState();
 
-
     const ObtenerUsuarios = async () => {
         await axios.get(baseUrlGetAllUsers).then(response => {
             setDataUsers(response.data);
@@ -146,11 +145,11 @@ const AsideChats = ({ joinRoom, titleAside, messagesOrteams, closeConnection }) 
             {
 
                 messagesOrteams == "messages" ?
-                    dataChats.map(chat =>
-                        <div key={chat.id}
+                    dataChats.map((chat, index) =>
+                        <div key={index}
                             onClick={() => {
                                 closeConnection();
-                                joinRoom(localStorage.getItem('UserName'), chat.username1 + 'and' + chat.username2);
+                                joinRoom(localStorage.getItem('UserName'), chat.username1 + 'and' + chat.username2, chat.id);
                             }}
                             className="row w-100 m-0 tarjeta-chat py-2">
                             <div className="col-2 d-flex align-items-center p-0">
