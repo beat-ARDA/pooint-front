@@ -6,9 +6,6 @@ import {
     baseUrlEliminarChatPorId
 } from './constantes';
 
-//Insertar chat en el then de iniciarchat
-//response.data.length > 0 ? null : InsertarChat(id1, id2, username1, username2);
-
 const IniciarChat = async (id1, id2) => {
     let response;
     try {
@@ -17,11 +14,10 @@ const IniciarChat = async (id1, id2) => {
         throw new Error(e.message)
     }
 
-    return response?.data ? response?.data : null // or set initial value
+    return response?.data ? response?.data : null
 }
 
 const InsertarChat = async (userId1, userId2, username1, username2) => {
-
     let response;
     try {
         response = await axios.post(baseUrlPostChat, { userId1, userId2, username1, username2 });
@@ -29,7 +25,7 @@ const InsertarChat = async (userId1, userId2, username1, username2) => {
         throw new Error(e.message)
     }
 
-    return response?.data ? response?.data : null // or set initial value
+    return response?.data ? response?.data : null
 }
 
 const ObtenerChatsPorUsuario = async () => {
@@ -37,12 +33,9 @@ const ObtenerChatsPorUsuario = async () => {
     try {
         response = await axios.get(baseUrlObtenerChatsPorUsuario, { params: { Id: parseInt(localStorage.getItem("UserId")) } });
     } catch (e) {
-        // catch error
         throw new Error(e.message)
     }
-
-    // if success return value
-    return response?.data ? response?.data : null // or set initial value
+    return response?.data ? response?.data : null
 }
 
 const EliminarChatPorId = async () => {

@@ -1,14 +1,17 @@
 import React from "react";
 import './aside-chats.css';
 import { useState, useEffect } from 'react';
-import axios from "axios";
 import { ObtenerUsuarios } from '../../Services/user.service';
 import { ObtenerChatsPorUsuario, IniciarChat, InsertarChat } from '../../Services/chat.service';
+import { InsertarChatTeam, ObtenerChatTeamId, ObtenerChatTeamById } from "../../Services/chat-team.service";
+import { InsertarChatTeamUser, ObtenerChatTeamsUsersByUserId } from '../../Services/chat-teams-users.service';
 
 const AsideChats = ({ joinRoom, titleAside, messagesOrteams, closeConnection }) => {
+    let datos = [];
     const [dataUsers, setDataUsers] = useState([]);
     const [dataUsersSearch, setDataUsersSearch] = useState([]);
     const [dataChats, setDataChats] = useState([]);
+    const [dataTeamsUsers, setDataTeamsUsers] = useState([]);
     const [chatId, setIdChat] = useState();
     const [userId, setIdUsuario] = useState();
     const [room, setRoom] = useState();
@@ -22,11 +25,26 @@ const AsideChats = ({ joinRoom, titleAside, messagesOrteams, closeConnection }) 
             .catch((error) => {
                 console.log(error);
             });
+        messagesOrteams == 'messages' ?
+            ObtenerChatsPorUsuario()
+                .then((response) => {
+                    setDataChats(response);
+                })
+                .catch((error) => console.log(error)) :
 
-        ObtenerChatsPorUsuario()
-            .then((response) =>
-                setDataChats(response))
-            .catch((error) => console.log(error));
+
+            ObtenerChatTeamsUsersByUserId(parseInt(localStorage.getItem('UserId').toString()))
+                .then((response) => {
+                    setDataTeamsUsers([]);
+                    response.map((team) => {
+                        ObtenerChatTeamById(team.chatTeamsId)
+                            .then((response) => {
+                                setDataTeamsUsers(dataTeamsUsers => [...dataTeamsUsers, response]);
+                            })
+                            .catch((error) => console.log(error));
+                    });
+                })
+                .catch((error) => console.log(error));
     }, []);
 
     return (
@@ -38,10 +56,13 @@ const AsideChats = ({ joinRoom, titleAside, messagesOrteams, closeConnection }) 
                     className="col-12 w-75 mt-2"
                     type="text"
                     placeholder="Search.."
-                    id="search"
-                    onClick={(e) => {
-                    }} />
-                <div className="modal fade" id="searchModal" tabIndex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+                    id="search" />
+                <div
+                    className="modal fade"
+                    id="searchModal"
+                    tabIndex="-1"
+                    aria-labelledby="searchModalLabel"
+                    aria-hidden="true">
                     <div className="modal-dialog">
                         <div className="modal-content">
                             <div className="modal-header">
@@ -75,22 +96,59 @@ const AsideChats = ({ joinRoom, titleAside, messagesOrteams, closeConnection }) 
                                         {dataUsersSearch.map((user, id) =>
                                             <li
                                                 onClick={(e) => {
-                                                    IniciarChat(
-                                                        parseInt(localStorage.getItem("UserId").toString()),
-                                                        user.id
-                                                    ).then((response) => {
-                                                        response.data.length > 0 ? null
-                                                            :
-                                                            InsertarChat(
-                                                                parseInt(localStorage.getItem("UserId").toString()),
-                                                                user.id,
-                                                                localStorage.getItem("UserName"),
-                                                                user.username
-                                                            ).then((response) => {
-                                                                if (response.data)
-                                                                    ObtenerChatsPorUsuario();
-                                                            }).catch((error) => console.log(error));
-                                                    }).catch((error) => console.log(error));
+                                                    messagesOrteams == 'messages' ?
+                                                        IniciarChat(
+                                                            parseInt(localStorage.getItem("UserId").toString()),
+                                                            user.id
+                                                        ).then((response) => {
+                                                            response.data.length > 0 ? null
+                                                                :
+                                                                InsertarChat(
+                                                                    parseInt(localStorage.getItem("UserId").toString()),
+                                                                    user.id,
+                                                                    localStorage.getItem("UserName"),
+                                                                    user.username
+                                                                ).then((response) => {
+                                                                    if (response.data)
+                                                                        ObtenerChatsPorUsuario();
+                                                                }).catch((error) => console.log(error));
+                                                        }).catch((error) => console.log(error)) :
+                                                        InsertarChatTeam(
+                                                            localStorage.getItem("UserName")
+                                                            +
+                                                            ", "
+                                                            + user.username
+                                                            + "...").then((response) => {
+                                                                if (response)
+                                                                    ObtenerChatTeamId(
+                                                                        localStorage.getItem("UserName")
+                                                                        +
+                                                                        ", "
+                                                                        + user.username
+                                                                        + "..."
+                                                                    )
+                                                                        .then((response) => {
+                                                                            InsertarChatTeamUser(
+                                                                                parseInt(localStorage.getItem('UserId')),
+                                                                                response.id);
+                                                                            InsertarChatTeamUser(
+                                                                                user.id,
+                                                                                response.id);
+                                                                            ObtenerChatTeamsUsersByUserId(parseInt(localStorage.getItem('UserId').toString()))
+                                                                                .then((response) => {
+                                                                                    setDataTeamsUsers([]);
+                                                                                    response.map((team) => {
+                                                                                        ObtenerChatTeamById(team.chatTeamsId)
+                                                                                            .then((response) => {
+                                                                                                setDataTeamsUsers(dataTeamsUsers => [...dataTeamsUsers, response]);
+                                                                                            })
+                                                                                            .catch((error) => console.log(error));
+                                                                                    });
+                                                                                })
+                                                                                .catch((error) => console.log(error));
+                                                                        })
+                                                                        .catch(error => console.log(error));
+                                                            }).catch(error => console.log(error));
                                                 }}
                                                 data-bs-dismiss="modal"
                                                 key={id}
@@ -129,19 +187,26 @@ const AsideChats = ({ joinRoom, titleAside, messagesOrteams, closeConnection }) 
                             <div className="col-2 d-flex align-items-center justify-content-end p-0">
                                 <label className="pe-2">Status</label>
                             </div>
-                        </div>) :
-                    <div key={1} onClick={e => {
-                        closeConnection();
-                        joinRoom(localStorage.getItem('UserName'), 'room');
-                    }} className="row w-100 m-0 tarjeta-chat py-2">
-                        <div className="col-2 d-flex align-items-center p-0">
-                            <img src="equipos.png" className="img-tarjeta-chat ms-2" />
                         </div>
-                        <div className="col-10 d-flex align-items-center justify-content-center p-0">
-                            <label>Nombre equipo</label>
+                    ) :
+                    dataTeamsUsers.map((chatTeam, index) =>
+                        <div key={index}
+                            onClick={() => {
+                                closeConnection();
+                                joinRoom(localStorage.getItem('UserName'), chatTeam.id.toString());
+                            }}
+                            className="row w-100 m-0 tarjeta-chat py-2">
+                            <div className="col-2 d-flex align-items-center p-0">
+                                <img src="perfil.jpg" className="img-tarjeta-chat ms-2" />
+                            </div>
+                            <div className="col-8 d-flex align-items-center justify-content-center p-0">
+                                <label>{chatTeam.chatName}</label>
+                            </div>
+                            <div className="col-2 d-flex align-items-center justify-content-end p-0">
+                                <label className="pe-2">Status</label>
+                            </div>
                         </div>
-                    </div>
-
+                    )
             }
         </aside>
     );
