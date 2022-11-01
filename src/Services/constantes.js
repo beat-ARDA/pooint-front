@@ -8,6 +8,9 @@ const baseUrlObtenerChatTeamId = 'https://localhost:44349/api/ChatsTeams/GetChat
 const baseUrlObtenerChatTeamById = 'https://localhost:44349/api/ChatsTeams/GetChatTeamById';
 const baseUrlPostChatTeamsUsers = 'https://localhost:44349/api/ChatsTeamsUsers/InsertChatTeamUser';
 const baseUrlObtenerChatTeamsUsersByUserId = 'https://localhost:44349/api/ChatsTeamsUsers/GetChatsTeamsUserByUserId';
+const baseUrlObtenerChatTeamsMessages = 'https://localhost:44349/api/ChatTeamsMessages/GetChatsTeamsMessages';
+const baseUrlPostChatTeamsMessages = 'https://localhost:44349/api/ChatTeamsMessages';
+
 
 export {
     baseUrlGetAllUsers,
@@ -19,5 +22,7 @@ export {
     baseUrlPostChatTeamsUsers,
     baseUrlObtenerChatTeamId,
     baseUrlObtenerChatTeamById,
-    baseUrlObtenerChatTeamsUsersByUserId
+    baseUrlObtenerChatTeamsUsersByUserId,
+    baseUrlObtenerChatTeamsMessages,
+    baseUrlPostChatTeamsMessages
 }

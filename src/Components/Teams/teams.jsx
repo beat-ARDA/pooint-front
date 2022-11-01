@@ -3,12 +3,15 @@ import AsideChats from '../AsideChats/aside-chats';
 import ZoneChats from '../ZoneChats/zone-chats';
 import { useState } from 'react';
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import { ObtenerChatTeamsMessages } from '../../Services/chat-teams-messages.service';
 
 const Teams = () => {
     const [connection, setConnection] = useState();
     const [messages, setMessages] = useState([]);
+    const [messagesTeamsDb, setMessageTeamsDb] = useState([]);
+    const [idChatTeam, setIdChatTeam] = useState();
 
-    const joinRoom = async (user, room) => {
+    const joinRoom = async (user, room, idChatTeam) => {
         try {
             const connection = new HubConnectionBuilder().withUrl("https://localhost:44349/chat")
                 .configureLogging(LogLevel.Information)
@@ -16,6 +19,7 @@ const Teams = () => {
 
             connection.on("ReceiveMessage", (user, message) => {
                 setMessages(messages => [...messages, { user, message }]);
+                setMessageTeamsDb(messagesTeamsDb => [...messagesTeamsDb, { user, message }]);
             });
 
             connection.onclose(e => {
@@ -25,7 +29,15 @@ const Teams = () => {
 
             await connection.start();
             await connection.invoke("JoinRoom", { user, room });
-            setConnection(connection);
+
+            ObtenerChatTeamsMessages(idChatTeam)
+                .then((response) => {
+                    console.log(response);
+                    setMessageTeamsDb(response);
+                    setConnection(connection);
+                    setIdChatTeam(idChatTeam);
+                })
+                .catch((error) => console.log(error));
         } catch (e) {
             console.log(e);
         }
@@ -65,7 +77,9 @@ const Teams = () => {
                                 messages={messages}
                                 titleZoneChat="Nombre equipo"
                                 videollamada={false}
-                                messagesOrteams="teams" />
+                                messagesOrteams="teams"
+                                messagesDbTeams={messagesTeamsDb}
+                                idChatTeam={idChatTeam} />
                         </div>
                         : null
                 }

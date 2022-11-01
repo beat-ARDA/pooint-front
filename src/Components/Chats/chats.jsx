@@ -21,7 +21,6 @@ const Chats = () => {
 
             connection.on("ReceiveMessage", (user, message) => {
                 setMessages(messages => [...messages, { user, message }]);
-
                 setMessageDb(messagesDb => [...messagesDb, {user, message}]);
             });
 

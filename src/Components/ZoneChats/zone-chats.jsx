@@ -2,9 +2,21 @@ import { useState, useRef, useEffect } from "react";
 import './zone-chats.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperclip, faPaperPlane, faVideoCamera, faCrosshairs } from '@fortawesome/free-solid-svg-icons';
+import { InsertarChatTeamsMessage } from "../../Services/chat-teams-messages.service";
+import { ObtenerUsuarios } from "../../Services/user.service";
+import { InsertarChatTeamUser, ObtenerChatTeamsUsersByUserId } from "../../Services/chat-teams-users.service";
 import axios from 'axios';
 
-const ZoneChat = ({ messages, sendMessage, messagesOrteams, titleZoneChat, videollamada, messagesDb, idChat }) => {
+const ZoneChat = ({
+    messages,
+    sendMessage,
+    messagesOrteams,
+    titleZoneChat,
+    videollamada,
+    messagesDb,
+    idChat,
+    messagesDbTeams,
+    idChatTeam }) => {
     const baseUrlInsertarMessage = 'https://localhost:44349/api/ChatMessage';
     const messageRef = useRef();
 
@@ -17,6 +29,17 @@ const ZoneChat = ({ messages, sendMessage, messagesOrteams, titleZoneChat, video
     }
 
     useEffect(() => {
+        ObtenerUsuarios()
+            .then((response) => {
+                setDataUsers(response);
+                setDataUsersSearch(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
+
+    useEffect(() => {
         if (messageRef && messageRef.current) {
             const { scrollHeight, clientHeight } = messageRef.current;
             messageRef.current.scrollTo({ left: 0, top: scrollHeight - clientHeight, behavior: 'smooth' });
@@ -24,7 +47,8 @@ const ZoneChat = ({ messages, sendMessage, messagesOrteams, titleZoneChat, video
     }, [messages]);
 
     const [message, setMessage] = useState('');
-    const [messagesData, setMessagesData] = useState([]);
+    const [dataUsersSearch, setDataUsersSearch] = useState([]);
+    const [dataUsers, setDataUsers] = useState([]);
 
     return (
         <div className='zonechat d-flex flex-column align-items-center'>
@@ -61,7 +85,21 @@ const ZoneChat = ({ messages, sendMessage, messagesOrteams, titleZoneChat, video
                                         <div className="modal-header">
                                             <div className="form-floating w-100">
                                                 <input
-                                                    onChange={e => { console.log("GG") }}
+                                                    onChange={e => {
+                                                        if (
+                                                            e.target.value == "" ||
+                                                            e.target.value == null ||
+                                                            e.target.value == undefined)
+                                                            setDataUsersSearch(dataUsers);
+                                                        else {
+                                                            setDataUsersSearch(dataUsers.filter(user => {
+                                                                let i = user.username.indexOf(e.target.value);
+                                                                if (i !== -1)
+                                                                    return user;
+                                                                else return false;
+                                                            }));
+                                                        }
+                                                    }}
                                                     className="form-control"
                                                     placeholder="Search..."
                                                     id="searchArea" />
@@ -72,7 +110,24 @@ const ZoneChat = ({ messages, sendMessage, messagesOrteams, titleZoneChat, video
                                             <section>
                                                 <label className="title-search-user w-100 text-center">Usuarios</label>
                                                 <ul className="userSearchElements">
-                                                    <li>Datos</li>
+                                                    {dataUsersSearch.map((user, index) =>
+                                                        <li
+                                                            onClick={(e) => {
+                                                                InsertarChatTeamUser(
+                                                                    user.id,
+                                                                    idChatTeam)
+                                                                    .then((response) => {
+                                                                        if (response)
+                                                                            location.reload();
+                                                                    })
+                                                                    .catch((error) => console.log(error));
+                                                            }}
+                                                            data-bs-dismiss="modal"
+                                                            key={index}
+                                                            id={user.id}>
+                                                            {user.username}
+                                                        </li>
+                                                    )}
                                                 </ul>
                                             </section>
                                         </div>
@@ -99,7 +154,7 @@ const ZoneChat = ({ messages, sendMessage, messagesOrteams, titleZoneChat, video
                                 </div>
                         )
                         :
-                        messages.map((m, index) =>
+                        messagesDbTeams.map((m, index) =>
                             m.user != localStorage.getItem("UserName") ?
                                 <div key={index} className="align-self-start row tarjeta p-0 ms-3 my-1 d-flex flex-column align-items-center">
                                     <div className="wrapper text-center col-12 m-0 p-2 text-tarjeta">{m.message}</div>
@@ -126,7 +181,9 @@ const ZoneChat = ({ messages, sendMessage, messagesOrteams, titleZoneChat, video
                         e.preventDefault();
                         sendMessage(message);
                         setMessage('');
-                        InsertarChat(idChat, message, localStorage.getItem('UserName'));
+                        messagesOrteams == 'messages' ?
+                            InsertarChat(idChat, message, localStorage.getItem('UserName')) :
+                            InsertarChatTeamsMessage(idChatTeam, message, localStorage.getItem('UserName'));
                     }} type="button">Send</button>
                 </div>
                 <div className="col-2 p-0 ps-2">

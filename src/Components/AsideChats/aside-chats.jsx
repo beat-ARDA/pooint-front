@@ -7,7 +7,6 @@ import { InsertarChatTeam, ObtenerChatTeamId, ObtenerChatTeamById } from "../../
 import { InsertarChatTeamUser, ObtenerChatTeamsUsersByUserId } from '../../Services/chat-teams-users.service';
 
 const AsideChats = ({ joinRoom, titleAside, messagesOrteams, closeConnection }) => {
-    let datos = [];
     const [dataUsers, setDataUsers] = useState([]);
     const [dataUsersSearch, setDataUsersSearch] = useState([]);
     const [dataChats, setDataChats] = useState([]);
@@ -130,22 +129,26 @@ const AsideChats = ({ joinRoom, titleAside, messagesOrteams, closeConnection }) 
                                                                         .then((response) => {
                                                                             InsertarChatTeamUser(
                                                                                 parseInt(localStorage.getItem('UserId')),
-                                                                                response.id);
-                                                                            InsertarChatTeamUser(
-                                                                                user.id,
-                                                                                response.id);
-                                                                            ObtenerChatTeamsUsersByUserId(parseInt(localStorage.getItem('UserId').toString()))
-                                                                                .then((response) => {
-                                                                                    setDataTeamsUsers([]);
-                                                                                    response.map((team) => {
-                                                                                        ObtenerChatTeamById(team.chatTeamsId)
-                                                                                            .then((response) => {
-                                                                                                setDataTeamsUsers(dataTeamsUsers => [...dataTeamsUsers, response]);
-                                                                                            })
-                                                                                            .catch((error) => console.log(error));
-                                                                                    });
-                                                                                })
-                                                                                .catch((error) => console.log(error));
+                                                                                response.id).then((respuesta) => {
+                                                                                    if (respuesta)
+                                                                                        InsertarChatTeamUser(
+                                                                                            user.id,
+                                                                                            response.id).then((respuesta2) => {
+                                                                                                if (respuesta2)
+                                                                                                    ObtenerChatTeamsUsersByUserId(parseInt(localStorage.getItem('UserId').toString()))
+                                                                                                        .then((response) => {
+                                                                                                            setDataTeamsUsers([]);
+                                                                                                            response.map((team) => {
+                                                                                                                ObtenerChatTeamById(team.chatTeamsId)
+                                                                                                                    .then((response) => {
+                                                                                                                        setDataTeamsUsers(dataTeamsUsers => [...dataTeamsUsers, response]);
+                                                                                                                    })
+                                                                                                                    .catch((error) => console.log(error));
+                                                                                                            });
+                                                                                                        })
+                                                                                                        .catch((error) => console.log(error));
+                                                                                            });
+                                                                                });
                                                                         })
                                                                         .catch(error => console.log(error));
                                                             }).catch(error => console.log(error));
@@ -193,7 +196,7 @@ const AsideChats = ({ joinRoom, titleAside, messagesOrteams, closeConnection }) 
                         <div key={index}
                             onClick={() => {
                                 closeConnection();
-                                joinRoom(localStorage.getItem('UserName'), chatTeam.id.toString());
+                                joinRoom(localStorage.getItem('UserName'), chatTeam.id.toString(), chatTeam.id);
                             }}
                             className="row w-100 m-0 tarjeta-chat py-2">
                             <div className="col-2 d-flex align-items-center p-0">
