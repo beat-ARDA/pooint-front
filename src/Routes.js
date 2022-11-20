@@ -4,15 +4,22 @@ import Chats from './Components/Chats/chats';
 import Teams from './Components/Teams/teams';
 import NoMatch from './Components/NoMatch/NoMatch';
 import Register from './Components/Register/Register';
+import Grupos from './Components/Grupos/Grupos';
+import SubGrup from './Components/SubGrupo/SubGrupo';
+
 
 export default function Router() {
     return (
         <Routes>
+            
             <Route path='/' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/messages' element={<Chats />} />
             <Route path='/teams' element={<Teams />} />
-            <Route path='*' element={<NoMatch />} />
+            <Route path='/Grupos' element={<Grupos/>} />
+            <Route path='/SubGrupo:idSubGrupo' element={<SubGrup/>} />
+            <Route path='*' element={<NoMatch/>} />
+
         </Routes>
     );
 }

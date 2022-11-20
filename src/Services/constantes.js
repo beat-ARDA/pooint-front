@@ -10,7 +10,17 @@ const baseUrlPostChatTeamsUsers = 'https://localhost:44349/api/ChatsTeamsUsers/I
 const baseUrlObtenerChatTeamsUsersByUserId = 'https://localhost:44349/api/ChatsTeamsUsers/GetChatsTeamsUserByUserId';
 const baseUrlObtenerChatTeamsMessages = 'https://localhost:44349/api/ChatTeamsMessages/GetChatsTeamsMessages';
 const baseUrlPostChatTeamsMessages = 'https://localhost:44349/api/ChatTeamsMessages';
-
+const baseUrlGetallGrups = 'https://localhost:44349/api/grupos/GetAllGrups';
+const baseUrlGetallSGrups = 'https://localhost:44349/api/SubGrupos';
+const baseUrlPostSubGrp = 'https://localhost:44349/api/SubGrupos';
+const baseUrlSGrupsIDGrp = 'https://localhost:44349/api/SubGrupos/GetSubGrupByGrupoId';
+const baseUrlSGrupsID = 'https://localhost:44349/api/SubGrupos/GetSubGrupBySGId';
+const baseUrlPostAvisos = 'https://localhost:44349/api/Avisos';
+const baseUrlGetAvisosSubID = "https://localhost:44349/api/Avisos/GetAvisoByGrupoId";
+const baseUrlGetTareabyIDSG = "https://localhost:44349/api/Tarea/GetSubGrupByGrupoId";
+const baseUrlGetTaerasbyIDSG = "https://localhost:44349/api/Tareas/GetTareasBySGrupoId";
+const baseUrlPostTarea = 'https://localhost:44349/api/Tarea'; 
+const baseUrlPostTareas = 'https://localhost:44349/api/Tareas';
 
 export {
     baseUrlGetAllUsers,
@@ -24,5 +34,16 @@ export {
     baseUrlObtenerChatTeamById,
     baseUrlObtenerChatTeamsUsersByUserId,
     baseUrlObtenerChatTeamsMessages,
-    baseUrlPostChatTeamsMessages
+    baseUrlPostChatTeamsMessages,
+    baseUrlGetallGrups,
+    baseUrlGetallSGrups,
+    baseUrlSGrupsIDGrp,
+    baseUrlSGrupsID,
+    baseUrlPostSubGrp,
+    baseUrlGetAvisosSubID,
+    baseUrlGetTareabyIDSG,
+    baseUrlGetTaerasbyIDSG,
+    baseUrlPostAvisos,
+    baseUrlPostTarea,
+    baseUrlPostTareas
 }

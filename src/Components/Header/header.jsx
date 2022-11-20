@@ -41,7 +41,7 @@ export default function Header() {
                                 </Link>
                             </div>
                             <div className='col-1 d-flex justify-content-center align-items-center'>
-                                <Link to="/homeworks">
+                                <Link to="/Grupos">
                                     <FontAwesomeIcon icon={faBriefcase} color="white" size="2x" className="icon-header" />
                                 </Link>
                             </div>

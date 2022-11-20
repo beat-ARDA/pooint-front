@@ -16,7 +16,7 @@ const Login = () => {
                     alert("Credenciales incorrectas");
                 else {
                     localStorage.setItem('UserName', username);
-                    localStorage.setItem('UserId', response.data.id);
+                    localStorage.setItem('UserId', response.data.id_user);               
                     alert("Inicio de sesion exitoso");
                     navigate('/messages');
                 }
