@@ -3,8 +3,14 @@
     height: 100%;
 }
 
+.row {
+    flex-wrap: nowrap !important;
+}
+
 .chat-zone {
     height: 82%;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .header-zonechat {
@@ -23,21 +29,45 @@
     border-radius: 2rem;
 }
 
-.tarjeta-texto-otro {
-    color: white;
-    background-color: #FF5D5D;
-    height: 10%;
-}
-
-.tarjeta-texto-yo {
-    color: white;
-    background-color: #9B9B9B;
-    height: 10%;
-}
-
 .footer-chatzone {
     height: 10%;
     background-color: black;
     color: white;
 
+}
+
+.tarjeta {
+    width: auto !important;
+    max-width: 50% !important;
+}
+
+.text-tarjeta-user {
+    font-size: 1.1rem;
+    color: white;
+    background-color: dodgerblue;
+    border-radius: 2rem;
+}
+
+.text-tarjeta {
+    font-size: 1.1rem;
+    color: white;
+    background-color: lightgreen;
+    border-radius: 2rem;
+}
+
+.text-user {
+    font-size: 0.7rem;
+    color: gray;
+}
+
+.wrapper {
+    overflow-wrap: break-word !important;
+}
+
+.añadir-persona:hover {
+    color: #FF5D5D;
+}
+
+.botonEncryptado {
+    background-color: green;
 }

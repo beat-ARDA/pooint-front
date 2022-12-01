@@ -1,0 +1,44 @@
+.header {
+    background-color: #FF5D5D;
+    height: 8%;
+    box-shadow: 1rem 0.2rem 1rem black;
+}
+
+.titulo-login {
+    color: white;
+    font-family: cursive;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.img-perfil {
+    height: 100% !important;
+    width: 3rem;
+    border-radius: 2rem;
+}
+
+.icon-header:hover {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+#status-text {
+    font-family: cursive;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+
+/*---------------------------------------------MEDIA QUERYS--------------------------------------------------------*/
+@media (min-width: 576px) {}
+
+/*Medium devices (tablets, 768px and up)*/
+@media (min-width: 768px) {}
+
+/*Large devices (desktops, 992px and up)*/
+@media (min-width: 992px) {}
+
+/*X-Large devices (large desktops, 1200px and up)*/
+@media (min-width: 1200px) {}
+
+/*XX-Large devices (larger desktops, 1400px and up)*/
+@media (min-width: 1400px) {}

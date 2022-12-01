@@ -1,0 +1,63 @@
+.aside-chats {
+    height: 100%;
+    border-right: 0.1rem solid;
+    box-shadow: 0.2rem 0.6rem 1rem black;
+}
+
+.aside-chat-title {
+    font-family: cursive;
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.row-chats-title {
+    border-bottom: 0.2rem solid;
+}
+
+.img-tarjeta-chat {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 2rem;
+}
+
+.tarjeta-chat {
+    font-family: cursive;
+    border-bottom: 0.02rem solid;
+}
+
+.tarjeta-chat:hover {
+    background-color: rgba(255, 93, 93, 1);
+    color: white;
+}
+
+.tarjeta-chat:focus {
+    background-color: rgba(255, 93, 93, 0.8);
+}
+
+.userSearchElements {
+    display: block;
+    height: 5rem;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    font-family: cursive;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.userSearchElements li {
+    color: white;
+    background-color: rgba(255, 93, 93, 1);
+    border-bottom: solid 0.0rem black;
+}
+
+.userSearchElements li:hover {
+    background-color: rgba(255, 93, 93, 0.8);
+}
+
+.title-search-user {
+    font-family: cursive;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
