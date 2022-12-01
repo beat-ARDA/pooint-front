@@ -98,13 +98,13 @@ aria-hidden="true">
                         messagesOrteams == 'messages' ?
                             IniciarChat(
                                 parseInt(localStorage.getItem("UserId").toString()),
-                                user.id
+                                user.id_user
                             ).then((response) => {
                                 response.data.length > 0 ? null
                                     :
                                     InsertarChat(
                                         parseInt(localStorage.getItem("UserId").toString()),
-                                        user.id,
+                                        user.id_user,
                                         localStorage.getItem("UserName"),
                                         user.username
                                     ).then((response) => {
@@ -132,7 +132,7 @@ aria-hidden="true">
                                                     response.id).then((respuesta) => {
                                                         if (respuesta)
                                                             InsertarChatTeamUser(
-                                                                user.id,
+                                                                user.id_user,
                                                                 response.id).then((respuesta2) => {
                                                                     if (respuesta2)
                                                                         ObtenerChatTeamsUsersByUserId(parseInt(localStorage.getItem('UserId').toString()))
@@ -155,12 +155,12 @@ aria-hidden="true">
                     }}
                     data-bs-dismiss="modal"
                     key={id}
-                    id={user.id}>
+                    id={user.id_user}>
                     {
                     user.estado == true ?
-                    <label ml-2 className="pe-2">{user.username}   ON</label>
+                    <label ml-2 className="pe-2">{user.username}   ON<p>{user.id_user}</p></label>
                     :
-                    <label ml-3 className="pe-2">{user.username}   OFF</label>
+                    <label ml-3 className="pe-2">{user.username}   OFF<p>{user.id_user}</p></label>
                     }
                 </li>
             )}
