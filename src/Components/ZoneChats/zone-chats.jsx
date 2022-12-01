@@ -9,6 +9,46 @@ import axios from 'axios';
 import { encrypt, decrypt } from "n-krypta";
 import { secretKey } from "../../Services/constantes";
 
+
+const useGeoLocation = () => {
+    const [location, setLocation] = useState({
+        loaded: false,
+        coordinates: { lat: "", lng: "" },
+    });
+
+    const onSuccess = (location) => {
+        setLocation({
+            loaded: true,
+            coordinates: {
+                lat: location.coords.latitude,
+                lng: location.coords.longitude,
+            },
+        });
+    };
+
+    const onError = (error) => {
+        setLocation({
+            loaded: true,
+            error: {
+                code: error.code,
+                message: error.message,
+            },
+        });
+    };
+
+    useEffect(() => {
+        if (!("geolocation" in navigator)) {
+            onError({
+                code: 0,
+                message: "Geolocation not supported",
+            });
+        }
+
+        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+    }, []);
+
+    return location;
+};
 const ZoneChat = ({
     messages,
     sendMessage,
@@ -21,6 +61,7 @@ const ZoneChat = ({
     idChatTeam }) => {
     const baseUrlInsertarMessage = 'https://localhost:44349/api/ChatMessage';
     const messageRef = useRef();
+    const GeoLocation = useGeoLocation();
 
     const [message, setMessage] = useState('');
     const [encryptadoActivado, setEncryptado] = useState(false);
@@ -195,7 +236,8 @@ const ZoneChat = ({
                     <FontAwesomeIcon icon={faPaperclip} size="2x" />
                 </div>
                 <div className="col-6 p-0 d-flex align-items-center">
-                    <input onChange={e => setMessage(e.target.value)} value={message} type="text" className="form-control" placeholder="Message..."
+                    <input onClick={(e) => setMessage(GeoLocation.loaded ? `Latitud: ${GeoLocation.coordinates.lat} Longitud: ${GeoLocation.coordinates.lng}` : "Cargando...")}
+                    onChange={e => setMessage(e.target.value)} value={message} type="text" className="form-control" placeholder="Message..."
                         aria-label="Message" aria-describedby="basic-addon1" />
                 </div>
                 <div className="col-2 p-0 d-flex align-items-center">
