@@ -3,10 +3,14 @@ import { baseUrlPostChatTeamsUsers, baseUrlObtenerChatTeamsUsersByUserId } from 
 
 const InsertarChatTeamUser = async (userId, chatTeamsId) => {
     let response;
+   
     try {
         console.log(userId);
+        console.log(chatTeamsId);
         response = await axios.post(baseUrlPostChatTeamsUsers, { userId, chatTeamsId });
     } catch (e) {
+        console.log(userId);
+        console.log(chatTeamsId);
         throw new Error(e.message)
     }
     return response?.data ? response?.data : null

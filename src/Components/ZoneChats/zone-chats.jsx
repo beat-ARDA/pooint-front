@@ -177,7 +177,7 @@ const ZoneChat = ({
                                                         <li
                                                             onClick={(e) => {
                                                                 InsertarChatTeamUser(
-                                                                    user.id,
+                                                                    user.id_user,
                                                                     idChatTeam)
                                                                     .then((response) => {
                                                                         if (response)
@@ -187,7 +187,7 @@ const ZoneChat = ({
                                                             }}
                                                             data-bs-dismiss="modal"
                                                             key={index}
-                                                            id={user.id}>
+                                                            id={user.id_user}>
                                                             {user.username}
                                                         </li>
                                                     )}

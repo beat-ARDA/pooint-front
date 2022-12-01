@@ -7,6 +7,7 @@ import {
 const ObtenerAvisosSGyGrupId = async (id_SubGrupo) => {
     let response;
     try {
+        console.log("que pedos");
         response = await axios.get(baseUrlGetAvisosSubID, { params: { id_SubGrupo: id_SubGrupo } });
     } catch (e) {
         throw new Error(e.message)
@@ -17,7 +18,7 @@ const ObtenerAvisosSGyGrupId = async (id_SubGrupo) => {
 const InsertarAviso = async (id_user,id_SubGrupo,texto) => {
     let response;
     try {
-        console.log(baseUrlPostAvisos)
+        
         
         id_user = parseInt(id_user)
         //console.log(typeof(id_user))

@@ -75,7 +75,7 @@ const SubGrupos = () => {
                 console.log(error);
             });  
                 
-    }, [idSubGrupo,dataAviso,dataTarea,dataTareas]);
+    }, [dataTarea,dataTareas]);
 
     return (
         <div className='chats container-fluid d-flex p-0'>
